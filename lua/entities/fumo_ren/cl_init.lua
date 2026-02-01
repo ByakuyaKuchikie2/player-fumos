@@ -45,6 +45,7 @@ end
 --
 net.Receive('fumo_ren.onUse', function()
     local self = net.ReadEntity()
+    if not self or not self:IsValid() then return end
 
     local p = net.ReadFloat()
     self.snd:SetPlaybackRate(1+p)
@@ -55,6 +56,7 @@ end)
 
 function ENT:Think()
     if not self or not self:IsValid() then return end
+
     self.currep = self.currep + 1
     if self.currep <= maxreps then
         local repsleft = maxreps - self.currep
@@ -97,6 +99,7 @@ end
 --
 net.Receive('fumo_ren.explode', function()
     local self = net.ReadEntity()
+    if not self or not self:IsValid() then return end
     
     self:SetNoDraw(true)
     self.explodeSheet:SetNoDraw(false)

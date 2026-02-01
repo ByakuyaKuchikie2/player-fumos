@@ -32,7 +32,7 @@ function ENT:Use(activator, caller, useType, value)
     if self.pitch >= 1.25 then
         net.Start("fumo_ren.explode")
             net.WriteEntity(self)
-        net.Broadcast()
+        net.SendPVS(self:GetPos())
         self.exploding = true
 
         timer.Simple(2, function() 
@@ -46,7 +46,7 @@ function ENT:Use(activator, caller, useType, value)
     net.Start("fumo_ren.onUse")
         net.WriteEntity(self)
         net.WriteFloat(self.pitch)
-    net.Broadcast()
+    net.SendPVS(self:GetPos())
 
     local dt = engine.TickInterval()
     self.pitch = self.pitch + dt * 5
