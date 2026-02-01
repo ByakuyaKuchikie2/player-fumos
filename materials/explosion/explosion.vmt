@@ -1,0 +1,15 @@
+"UnlitGeneric"
+{
+	"$basetexture" "explosion/explosion.vtf"
+	"$translucent" "1"
+	"$frame"	"7"
+	"Proxies"	
+	{
+		"AnimatedTexture"
+		{
+			"animatedtexturevar" "$basetexture"
+			"animatedtextureframenumvar" "$frame"
+			"animatedtextureframerate" "10"
+		}
+	}
+}
