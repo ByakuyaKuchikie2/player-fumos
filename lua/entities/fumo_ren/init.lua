@@ -53,8 +53,10 @@ function ENT:Use(activator, caller, useType, value)
 end
 
 function ENT:Think()
-    self:NextThink(CurTime()+FrameTime())
+    self:NextThink(CurTime())
     if self.lastUsed+delay < CurTime() then
         self.pitch = 0
     end
+
+    return true
 end
