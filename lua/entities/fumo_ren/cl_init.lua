@@ -1,19 +1,14 @@
 include("shared.lua")
 
--- Initialize empty vars for sound and clientside models
---
-
-local dt = FrameTime()
-local duration = 0.5
-local maxreps = math.floor(duration / dt)
 function ENT:Initialize()
 
     -- Create the sound the plush will make when used
     --
     self.snd = nil
-    sound.PlayFile('sound/ren.mp3', '3d noplay noplay', function(snd)
+    sound.PlayFile('sound/ren.mp3', '3d noplay noplay', function(snd, err, errtxt)
+        if err then print(err,errtxt,"\nIf you are seeing this, please let ByakuyaKuchiki know!") end
+
         if snd then
-            print('sound initialized')
             self.snd = snd
             self.snd:Set3DFadeDistance(256, 512)
         end
@@ -27,7 +22,10 @@ function ENT:Initialize()
     self.explodeSheet:SetNoDraw(true)
     self.explodeSheet:SetMaterial("explosion/explosion.vmt")
 
-    self.currep = maxreps --setting it the this in the init so it doesn't play the animation on first spawn
+    self.dt = FrameTime()
+    self.duration = 0.5
+    self.maxreps = math.floor(self.duration / self.dt)
+    self.currep = self.maxreps --setting it the this in the init so it doesn't play the animation on first spawn
 end
 
 function ENT:Draw()
@@ -38,7 +36,7 @@ end
 --
 function ENT:OnRemove()
     self.explodeSheet:Remove()
-    if self.snd:IsValid() then self.snd:Stop() end 
+    if self.snd and self.snd:IsValid() then self.snd:Stop() end 
 end
 
 -- play the sound and animation
@@ -48,20 +46,23 @@ net.Receive('fumo_ren.onUse', function()
     if not self or not self:IsValid() then return end
 
     local p = net.ReadFloat()
-    self.snd:SetPlaybackRate(1+p)
-    self.snd:SetTime(0)
-    self.snd:Play()
+    if self.snd or self.snd:IsValid() then 
+        self.snd:SetPlaybackRate(1+p)
+        self.snd:SetTime(0)
+        self.snd:Play()
+    end
     self.currep = 0
 end)
 
 function ENT:Think()
     if not self or not self:IsValid() then return end
 
-    self.currep = self.currep + 1
-    if self.currep <= maxreps then
-        local repsleft = maxreps - self.currep
-        local elapsedtime = (maxreps - repsleft) * dt
-        local t = 1-(duration-elapsedtime) / duration
+    if self.currep <= self.maxreps then
+        self.currep = self.currep + 1
+
+        local repsleft = self.maxreps - self.currep
+        local elapsedtime = (self.maxreps - repsleft) * self.dt
+        local t = 1-(self.duration-elapsedtime) / self.duration
 
         local bell = math.sin(math.pi * t)
         
