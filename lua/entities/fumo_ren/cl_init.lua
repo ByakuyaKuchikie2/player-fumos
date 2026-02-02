@@ -79,7 +79,7 @@ function ENT:Think()
 
     -- Angle the clientside model towards the player eyes
     --
-    if self.explodeSheet and self.explodeSheet:isValid() then
+    if self.explodeSheet and self.explodeSheet:IsValid() then
         local dir = (EyePos() - self:GetPos()):GetNormalized()
         local ang = dir:Angle()
         ang:RotateAroundAxis(ang:Right(), 90)
