@@ -46,7 +46,7 @@ net.Receive('fumo_ren.onUse', function()
     if not self or not self:IsValid() then return end
 
     local p = net.ReadFloat()
-    if self.snd or self.snd:IsValid() then 
+    if self.snd and self.snd:IsValid() then 
         self.snd:SetPlaybackRate(1+p)
         self.snd:SetTime(0)
         self.snd:Play()
