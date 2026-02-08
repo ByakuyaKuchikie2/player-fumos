@@ -29,7 +29,7 @@ end
 -- Remove the think hook for the audio and remove the clientide model
 --
 function ENT:OnRemove()
-    self.explodeSheet:Remove()
+    if IsValid(self.explodeSheet) then self.explodeSheet:Remove() end
     if IsValid(self.snd) then self.snd:Stop() end 
 end
 
@@ -73,7 +73,7 @@ function ENT:Think()
 
     -- Angle the clientside model towards the player eyes
     --
-    if IsValid(self.explodeSheet:IsValid()) then
+    if IsValid(self.explodeSheet) then
         local dir = (EyePos() - self:GetPos()):GetNormalized()
         local ang = dir:Angle()
         ang:RotateAroundAxis(ang:Right(), 90)
