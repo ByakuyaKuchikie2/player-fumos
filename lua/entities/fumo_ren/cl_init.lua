@@ -16,12 +16,6 @@ function ENT:Initialize()
 
     -- Create the clientside model the explosion vtf will play on
     --
-    self.explodeSheet = ClientsideModel("models/hunter/plates/plate1x1.mdl")
-    self.explodeSheet:SetPos(self:GetPos())
-    self.explodeSheet:SetParent(self)
-    self.explodeSheet:SetNoDraw(true)
-    self.explodeSheet:SetMaterial("explosion/explosion.vmt")
-
     self.dt = FrameTime()
     self.duration = 0.5
     self.maxreps = math.floor(self.duration / self.dt)
@@ -36,7 +30,7 @@ end
 --
 function ENT:OnRemove()
     self.explodeSheet:Remove()
-    if self.snd and self.snd:IsValid() then self.snd:Stop() end 
+    if IsValid(self.snd) then self.snd:Stop() end 
 end
 
 -- play the sound and animation
@@ -46,7 +40,7 @@ net.Receive('fumo_ren.onUse', function()
     if not self or not self:IsValid() then return end
 
     local p = net.ReadFloat()
-    if self.snd and self.snd:IsValid() then 
+    if IsValid(self.snd) then 
         self.snd:SetPlaybackRate(1+p)
         self.snd:SetTime(0)
         self.snd:Play()
@@ -79,7 +73,7 @@ function ENT:Think()
 
     -- Angle the clientside model towards the player eyes
     --
-    if self.explodeSheet and self.explodeSheet:IsValid() then
+    if IsValid(self.explodeSheet:IsValid()) then
         local dir = (EyePos() - self:GetPos()):GetNormalized()
         local ang = dir:Angle()
         ang:RotateAroundAxis(ang:Right(), 90)
@@ -103,6 +97,12 @@ end
 net.Receive('fumo_ren.explode', function()
     local self = net.ReadEntity()
     if not self or not self:IsValid() then return end
+
+    self.explodeSheet = ClientsideModel("models/hunter/plates/plate1x1.mdl")
+    self.explodeSheet:SetPos(self:GetPos())
+    self.explodeSheet:SetParent(self)
+    self.explodeSheet:SetNoDraw(true)
+    self.explodeSheet:SetMaterial("explosion/explosion.vmt")
     
     self:SetNoDraw(true)
     self.explodeSheet:SetNoDraw(false)
