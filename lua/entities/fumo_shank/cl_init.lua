@@ -5,7 +5,7 @@ function ENT:Initialize()
     -- Create the sound the plush will make when used
     --
     self.snd = nil
-    sound.PlayFile('sound/ren-use.mp3', '3d noplay noplay', function(snd, err, errtxt)
+    sound.PlayFile('sound/shank-use.mp3', '3d noplay noplay', function(snd, err, errtxt)
         if err then print(err,errtxt,"\nIf you are seeing this, please let ByakuyaKuchiki know!") end
 
         if snd then
@@ -35,7 +35,7 @@ end
 
 -- play the sound and animation
 --
-net.Receive('fumo_ren.onUse', function()
+net.Receive('fumo_shank.onUse', function()
     local self = net.ReadEntity()
     if not self or not self:IsValid() then return end
 
@@ -94,7 +94,7 @@ end
 
 -- when pressed too many times
 --
-net.Receive('fumo_ren.explode', function()
+net.Receive('fumo_shank.explode', function()
     local self = net.ReadEntity()
     if not self or not self:IsValid() then return end
 
@@ -107,5 +107,5 @@ net.Receive('fumo_ren.explode', function()
     self:SetNoDraw(true)
     self.explodeSheet:SetNoDraw(false)
     if self.snd:IsValid() then self.snd:Stop() end 
-    self:EmitSound("ren-die.mp3", 75, 100, 1, CHAN_ITEM)
+    self:EmitSound("explosion.mp3", 75, 100, 1, CHAN_ITEM)
 end)
